@@ -2,6 +2,21 @@ let assert = require('assert');
 let hello = require('./public/main').hello;
 let plural = require('./public/main').plural;
 
+let filter= require('./public/main').filter;
+
+
+global.window = {
+    rules: ['orange', 'apple']
+}
+
+assert.equal(filter('orange'), '******');
+assert.equal(filter('orange asdasd'), '****** asdasd');
+assert.equal(filter('orangeasdasd'), 'orangeasdasd');
+assert.equal(filter('asdasd orange'), 'asdasd ******');
+assert.equal(filter('asdasdorange'), 'asdasdorange');
+
+
+
 assert.equal(hello('Test'), 'Привет, Test');
 
 assert.equal(plural(0), 'Здравствуй, дух');

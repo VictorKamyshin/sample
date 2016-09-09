@@ -36,19 +36,19 @@ function plural (number) {
 }
 
 function hello (text, visits) {
-    if ( isCyrillic(text) ) {
+    //if ( isCyrillic(text) ) {
 	if ( visits != undefined ) {
             return 'Привет, ' + text + '. Вы посетили страницу ' + visits + ' '+ my_plural(visits);
 	} else {
 	    return 'Привет, ' + text;
 	}
-    } else {
+    /*} else {
         if ( visits != undefined ) {
             return 'Hello, ' + text + ' . You visited this page ' + visits + ' ' +my_plural_eng(visits);
         } else {
             return 'Hello, ' + text;
         }
-    }
+    }*/
 }
 
 function my_plural ( number ) {
@@ -77,6 +77,28 @@ if (typeof exports ==='object') {
 
 if (typeof exports == 'object') {
     exports.plural = plural;
+}
+
+function filter(str) {
+
+    let rules = window.rules;
+
+    rules = rules.map(rule=> {
+        return {
+            regexp: new RegExp(`\\b${rule}\\b`,'g'),
+            length: rule.length
+        };
+    });
+
+    rules.forEach(rule=> {
+        str = str.replace(rule.regexp, (new Array(rule.length +1)).join('*'))
+    }); 
+
+    return str;
+}
+
+if (typeof exports == 'object') {
+    exports.filter = filter;
 }
 
 
