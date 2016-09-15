@@ -1,9 +1,8 @@
 language: node_js
 node_js:
-  -6
-
-deploy: 
+- 6
+deploy:
   provider: heroku
   api_key:
     token: a5b3a354-80a0-408c-b9b3-de1ac54030a0
-
+  app: sample-home-task-2
