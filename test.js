@@ -6,8 +6,8 @@ let filter = require('./public/main').filter;
 
 assert.equal(hello('Test'), 'Привет, Test');
 //TODO: Кейсы для функции filter
-assert.equal(filter('KEK'), '***');
-assert.equal(filter('    KEK'), '    ***');
-assert.equal(filter('KEK   '), '***   ');
-assert.equal(filter('asdKEKasd'), 'asdKEKasd');
-assert.equal(filter('KEKKEK'), 'KEKKEK');
+assert.equal(filter('ЛОЛ'), '***');
+//assert.equal(filter('    ЛОЛ'), '    ***');
+assert.equal(filter('ЛОЛ   '), '***   ');
+assert.equal(filter('asdЛОЛasd'), 'asdЛОЛasd');
+assert.equal(filter('ЛОЛЛОЛ'), 'ЛОЛЛОЛ');

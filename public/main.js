@@ -2,11 +2,11 @@
 
 let userData = {};
 
-function filter (str, rules = ['KEK']) {
-//	str = win2unicode(str) ; 
+function filter (str, rules = ['ЛОЛ']) {
+//	str = win2unicode(str) ;
 	rules = rules.map(rule=> {
         return {
-            regexp: new RegExp('\\b'+rule+'\\b','g'),
+            regexp: new RegExp('((^|\[^a-zA-Zа-яёА-ЯЁ]))'+rule+'(?=($|\[^a-zA-Zа-яёА-ЯЁ]))','ig'),
             length: rule.length
         };
     });
@@ -14,6 +14,7 @@ function filter (str, rules = ['KEK']) {
     rules.forEach(rule=> {
        str = str.replace(rule.regexp, (new Array(rule.length +1)).join('*'))
     });
+//	str = str.substr(2, str.length-2);
 //	console.log(rules);
 //	console.log(str);
     return str;
