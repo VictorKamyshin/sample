@@ -1,104 +1,78 @@
 'use strict';
-function onSubmit(form) {
-    var data = {
-        user: form.elements['user'].value,
-        email: form.elements['email'].value
-    };
-    let result = JSON.parse(request('/users', data));
-    let visits = result.visits; 
-   // form.hidden = true;
-    helloWorld.innerHTML = hello(data.user, visits);
-    console.log(data);
-    console.log(result);
+
+let userData = {};
+
+function filter (str, rules = ['КЕК']) {
+	return `//TODO: реализовать filter`;
 }
 
-function plural (number) {
-    switch(number) {
-        case 0:
-            return 'Здравствуй, дух';
-            break;
-        case 1:
-            return 'Рады приветствовать на нашем курсе!';
-            break;
-        case 2:
-            return 'Кликай дальше!! Еще осталось 13 раз(а)';
-            break;
-        case 13:
-            return 'Кликай дальше!! Еще осталось 2 раз(а)';
-            break;
-        case 15:
-            return '01001000 01101001 00101100 00100000 01100010 01110010 01101111';
-            break;
-        case 100:
-            return '01001000 01101001 00101100 00100000 01100010 01110010 01101111';
-            break;
-    }
+function onLogin (form, block) {
+	userData = {
+		user: form.elements['user'].value,
+		email: form.elements['email'].value
+	};
+
+	 jsLogin.hidden = true;
+	 jsChat.hidden = false;
+
+	 if (userData.user) {
+		 userData.user = filter(userData.user);
+		 jsTitle.innerHTML = jsTitle.innerHTML.replace('%username%', userData.user);
+	 }
+
+	 subscribe();
 }
 
-function hello (text, visits) {
-    //if ( isCyrillic(text) ) {
-	if ( visits != undefined ) {
-            return 'Привет, ' + text + '. Вы посетили страницу ' + visits + ' '+ my_plural(visits);
+function createMessage (opts, isMy = false) {
+	let message = document.createElement('div');
+	let email = document.createElement('div');
+
+	message.classList.add('chat__message');
+	email.classList.add('chat__email');
+
+	if (isMy) {
+		message.classList.add('chat__message_my');
 	} else {
-	    return 'Привет, ' + text;
+		message.style.backgroundColor = `#${technolibs.colorHash(opts.email || '')}`;
 	}
-    /*} else {
-        if ( visits != undefined ) {
-            return 'Hello, ' + text + ' . You visited this page ' + visits + ' ' +my_plural_eng(visits);
-        } else {
-            return 'Hello, ' + text;
-        }
-    }*/
+	message.innerHTML = opts.message;
+	email.innerHTML = opts.email;
+	message.appendChild(email);
+
+
+	return message;
 }
 
-function my_plural ( number ) {
-    if (number % 10  > 1 && number % 10 < 5 && (number > 20 || number < 10) ) {
-        return 'раза.';
-    } else {
-        return 'раз.';
-    }
+function onChat (form) {
+	let data = {
+		message: form.elements['message'].value,
+		email: userData.email
+	};
+
+	let result = technolibs.request('/api/messages', data);
+	form.reset();
 }
 
-function my_plural_eng ( number ) {
-    if (number > 1) {
-        return 'times.';
-    } else {
-        return 'time.';
-    }
+function renderChat (items) {
+	jsMessages.innerHTML = '';
+	items.forEach(item => {
+		let message = createMessage(item, item.email === userData.email);
+		jsMessages.appendChild(message);
+	});
+	jsMessages.scrollTop = jsMessages.scrollHeight;
 }
 
-var isCyrillic = function (my_text) {
-     return /[а-я]/i.test(my_text);
+function subscribe () {
+	technolibs.onMessage(data => {
+		renderChat(Object.keys(data).map(key => data[key]));
+	});
 }
 
-if (typeof exports ==='object') {
-    exports.hello = hello; 
+function hello(text) {
+	return 'Привет, ' + text;
 }
 
-if (typeof exports == 'object') {
-    exports.plural = plural;
+if (typeof exports === 'object') {
+	exports.hello = hello;
+	exports.filter = filter;
 }
-
-function filter(str) {
-
-    let rules = window.rules;
-
-    rules = rules.map(rule=> {
-        return {
-            regexp: new RegExp(`\\b${rule}\\b`,'g'),
-            length: rule.length
-        };
-    });
-
-    rules.forEach(rule=> {
-        str = str.replace(rule.regexp, (new Array(rule.length +1)).join('*'))
-    }); 
-
-    return str;
-}
-
-if (typeof exports == 'object') {
-    exports.filter = filter;
-}
-
-

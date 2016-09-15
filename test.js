@@ -1,7 +1,7 @@
 let assert = require('assert');
 let hello = require('./public/main').hello;
 let plural = require('./public/main').plural;
-let filter= require('./public/main').filter;
+let filter = require('./public/main').filter;
 
 
 global.window = {
@@ -24,3 +24,5 @@ assert.equal(plural(2), 'Кликай дальше!! Еще осталось 13 
 assert.equal(plural(13), 'Кликай дальше!! Еще осталось 2 раз(а)');
 assert.equal(plural(15), '01001000 01101001 00101100 00100000 01100010 01110010 01101111');
 assert.equal(plural(100), '01001000 01101001 00101100 00100000 01100010 01110010 01101111');
+//TODO: Кейсы для функции filter
+// assert.equal(filter('КЕК'), '***');
