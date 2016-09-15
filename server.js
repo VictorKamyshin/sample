@@ -1,33 +1,28 @@
 let express = require('express');
-let technologger = require('technologger');
 let parser = require('body-parser');
 let app = express();
+let technoDoc = require('techno-gendoc');
+let path = require('path');
+
+let technolibs = require('technolibs');
 
 app.use('/', express.static('public'));
+technoDoc.generate(require('./api'), 'public');
 
 app.use(parser.json());
-app.use(technologger);
+app.use('/libs', express.static('node_modules'));
 
-var array = {};
-app.post('/users', (req, res) => {
-    console.log(req.body);
-    var my_response = {
-        status : '100',
-        visits : 0
-    };
-    if(req.body.email in array) {
-        array[req.body.email]+=1;
-        my_response.visits = array[req.body.email];
-        res.send( my_response );
-    } else {
-        array[req.body.email] = 1;
-        my_response.visits = array[req.body.email];
-        my_response.status = '200';
-        res.send( my_response );
-    }
-    // TODO: вернуть количество обращений
-    // Сколько пользователей с таким э-мейлом уже обращалось
-    //https://learn.javascript.ru/object
+app.post('/api/messages', (req, res) => {
+	technolibs.publish(req.body).then(body => res.json(req.body));
+});
+
+app.get('/api/messages', function (req, res) {
+	res.send([
+		technoDoc.mock(require('./api/scheme/Message')),
+		technoDoc.mock(require('./api/scheme/Message')),
+		technoDoc.mock(require('./api/scheme/Message')),
+		technoDoc.mock(require('./api/scheme/Message'))
+	])
 });
 
 app.listen(process.env.PORT || 3000, () => {
